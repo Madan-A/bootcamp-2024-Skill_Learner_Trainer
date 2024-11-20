@@ -91,100 +91,128 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      <div className="form-container">
-        <img src="/logo.png" alt="App Logo" className="logo" />
-        <h2 className="heading">Student Signup</h2>
-        <form onSubmit={handleSubmit}>
-          <label className="label">
-            Name:
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="input"
-            />
-            {errors.name && <p className="error">{errors.name}</p>}
-          </label>
+    <div className="signup-container">
+      {/* Left section */}
+      <div className="signup-left">
+        <h1>✨ Sign Up</h1>
+        <p className="signup-subtitle">Signup for free</p>
 
-          <label className="label">
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="input"
-            />
-            {errors.email && <p className="error">{errors.email}</p>}
-          </label>
+        <button className="signup-btn google-btn">
+          <img src="/google-icon.png" alt="Google" className="icon" />
+          Sign up with Google
+        </button>
+        <button className="signup-btn apple-btn">
+          <img src="/apple-icon.png" alt="Apple" className="icon" />
+          Sign up with Apple
+        </button>
 
-          <label className="label">
-            Phone Number:
-            <input
-              type="number"
-              name="number"
-              value={formData.number}
-              onChange={handleChange}
-              required
-              className="input"
-            />
-            {errors.number && <p className="error">{errors.number}</p>}
-          </label>
+        <div className="or-divider">
+          --------------------OR--------------------
+        </div>
 
-          <label className="label">
-            Password:
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="input"
-            />
-            {errors.password && <p className="error">{errors.password}</p>}
-          </label>
+        <div className="form-container">
+          <form onSubmit={handleSubmit}>
+            <label className="label">
+              Name:
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="input"
+              />
+              {errors.name && <p className="error">{errors.name}</p>}
+            </label>
 
-          <label className="label">
-            Confirm Password:
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              className="input"
-            />
-            {errors.confirmPassword && (
-              <p className="error">{errors.confirmPassword}</p>
-            )}
-          </label>
+            <label className="label">
+              Email:
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="input"
+              />
+              {errors.email && <p className="error">{errors.email}</p>}
+            </label>
 
-          <fieldset className="interests-fieldset">
-            <legend className="legend">Interests</legend>
-            <div className="interests-container">
-              {interestsOptions.map((interest) => (
-                <div
-                  key={interest}
-                  className={`interest-box ${
-                    selectedInterests.includes(interest) ? "selected" : ""
-                  }`}
-                  onClick={() => toggleInterest(interest)}
-                >
-                  {interest}
-                </div>
-              ))}
-            </div>
-          </fieldset>
-          <br />
+            <label className="label">
+              Phone Number:
+              <input
+                type="number"
+                name="number"
+                value={formData.number}
+                onChange={handleChange}
+                required
+                className="input"
+              />
+              {errors.number && <p className="error">{errors.number}</p>}
+            </label>
 
-          <button type="submit" className="button">
-            Sign Up
-          </button>
-        </form>
+            <label className="label">
+              Password:
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="input"
+              />
+              {errors.password && <p className="error">{errors.password}</p>}
+            </label>
+
+            <label className="label">
+              Confirm Password:
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                className="input"
+              />
+              {errors.confirmPassword && (
+                <p className="error">{errors.confirmPassword}</p>
+              )}
+            </label>
+
+            <fieldset className="interests-fieldset">
+              <legend className="legend">Interests</legend>
+              <div className="interests-container">
+                {interestsOptions.map((interest) => (
+                  <div
+                    key={interest}
+                    className={`interest-box ${
+                      selectedInterests.includes(interest) ? "selected" : ""
+                    }`}
+                    onClick={() => toggleInterest(interest)}
+                  >
+                    {interest}
+                  </div>
+                ))}
+              </div>
+            </fieldset>
+            <br />
+            <label className="signup-checkbox">
+              <input type="checkbox" />I agree to all the{" "}
+              <a href="/terms">Privacy Policy and Terms & Conditions</a>
+            </label>
+            <br />
+            <br />
+
+            <button type="submit" className="button">
+              Sign Up
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Right Section */}
+      <div className="signup-right">
+        <img src="/signup.png" alt="image" className="signup-img" />
       </div>
     </div>
   );
