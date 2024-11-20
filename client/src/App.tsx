@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchSampleData } from './services/apiService';
+import Login from './Login';
 
 interface SampleData {
   id: number;
@@ -15,12 +16,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <h1>Sample Data</h1>
-      <ul>
-        {data.map(item => (
-          <li key={item.id}>{item.name}</li>
-        ))}
-      </ul>
+      <Login/>
     </div>
   );
 };
