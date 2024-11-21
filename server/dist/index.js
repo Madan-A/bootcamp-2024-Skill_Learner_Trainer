@@ -17,7 +17,9 @@ const cors_1 = __importDefault(require("cors"));
 const sampleRoute_1 = __importDefault(require("./routes/sampleRoute"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const db_1 = require("./config/db");
-const newRoutes_1 = __importDefault(require("./routes/newRoutes"));
+const newRoutes_1 = __importDefault(require("./routes/loginRoutes"));
+const userRouter_1 = __importDefault(require("./routes/createRoute"));
+
 //import express from 'express';
 dotenv_1.default.config();
 const app = (0, express_1.default)();
