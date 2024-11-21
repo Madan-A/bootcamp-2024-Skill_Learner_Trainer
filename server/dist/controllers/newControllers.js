@@ -7,15 +7,15 @@ const getNewData = (req, res) => {
     const db = req.app.locals.db; // Access the SQLite db instance
     if (!db) {
         console.error('Database instance not found in app.locals.');
-        return res.status(500).json({ success: false, message: 'Database connection error' });
+        res.status(500).json({ success: false, message: 'Database connection error' });
     }
     db.all(query, (err, rows) => {
         if (err) {
             console.error('Error executing query:', err.message);
-            return res.status(500).json({ success: false, message: 'Server error while fetching data' });
+            res.status(500).json({ success: false, message: 'Server error while fetching data' });
         }
         if (!rows || rows.length === 0) {
-            return res.status(404).json({ success: false, message: 'No data found in the table' });
+            res.status(404).json({ success: false, message: 'No data found in the table' });
         }
         res.status(200).json({ success: true, data: rows });
     });
