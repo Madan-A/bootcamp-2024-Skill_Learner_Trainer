@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Home from "./Home";
+import "./LoginSignup.css";
 
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -7,17 +9,21 @@ const Signup: React.FC = () => {
     number: "",
     password: "",
     confirmPassword: "",
-    interests: "", // Add interests field here
   });
 
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [errors, setErrors] = useState({
     name: "",
     email: "",
     number: "",
     password: "",
     confirmPassword: "",
-    interests: "",
   });
+
+  const [showHome, setShowHome] = useState(false); // State to control redirection
+  const [isSubmitting, setIsSubmitting] = useState(false); // To manage loading state
+
+  const interestsOptions = ["Music", "Art", "Dance", "Yoga", "C++", "Java"];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -26,11 +32,14 @@ const Signup: React.FC = () => {
     });
   };
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      interests: e.target.checked ? e.target.value : "",
-    });
+  const toggleInterest = (interest: string) => {
+    if (selectedInterests.includes(interest)) {
+      setSelectedInterests(
+        selectedInterests.filter((item) => item !== interest)
+      );
+    } else {
+      setSelectedInterests([...selectedInterests, interest]);
+    }
   };
 
   const validate = () => {
@@ -40,28 +49,23 @@ const Signup: React.FC = () => {
       number: "",
       password: "",
       confirmPassword: "",
-      interests: "",
     };
 
-    // Name Validation: Should be at least 3 characters long
     if (formData.name.trim().length < 3) {
       newErrors.name = "Name must be at least 3 characters long.";
     }
 
-    // Email Validation: Should follow the proper email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       newErrors.email = "Enter a valid email address.";
     }
 
-    // Phone Number Validation: Should start with 9, 8, 7, or 6 and be 10 digits long
     const phoneRegex = /^[9876]\d{9}$/;
     if (!phoneRegex.test(formData.number)) {
       newErrors.number =
         "Phone number must start with 9, 8, 7, or 6 and be 10 digits.";
     }
 
-    // Password Validation: Should contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(formData.password)) {
@@ -69,258 +73,184 @@ const Signup: React.FC = () => {
         "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long.";
     }
 
-    // Confirm Password Validation: Should match the password
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match.";
     }
 
-    // Interests Validation: Should not be empty
-    if (!formData.interests) {
-      newErrors.interests = "Please select at least one interest.";
-    }
-
     setErrors(newErrors);
-
     return Object.keys(newErrors).every(
       (key) => newErrors[key as keyof typeof newErrors] === ""
-    ); // Return true if no errors
+    );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      console.log("Form submitted successfully!");
-      // Handle form submission logic here
+      setIsSubmitting(true); // Set loading state to true before sending the request
+
+      // Commented out API code completely for now
+      // const signupData = {
+      //   name: formData.name,
+      //   email: formData.email,
+      //   number: formData.number,
+      //   password: formData.password,
+      //   interests: selectedInterests,
+      // };
+      // try {
+      //   const response = await fetch("https://your-api-url.com/createuser", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify(signupData),
+      //   });
+      //   const result = await response.json();
+      //   if (response.ok) {
+      //     setShowHome(true);
+      //   } else {
+      //     alert("Signup failed: " + result.message);
+      //   }
+      // } catch (error) {
+      //   alert("An error occurred. Please try again.");
+      // } finally {
+      //   setIsSubmitting(false);
+      // }
+
+      // Directly trigger redirection to the Home page
+      setShowHome(true); // Trigger redirection
     }
   };
 
+  if (showHome) {
+    return <Home />;
+  }
+
   return (
-    <div style={styles.container}>
-      {/* Logo */}
-      <img src="/logo.png" alt="App Logo" style={styles.logo} />
+    <div className="signup-container">
+      {/* Left section */}
+      <div className="signup-left">
+        <h1>✨ Sign Up</h1>
+        <p className="signup-subtitle">Signup for free</p>
 
-      {/* Signup Form */}
-      <div style={styles.formContainer}>
-        <h2 style={styles.heading}>Student Signup</h2>
-        <form onSubmit={handleSubmit}>
-          <label style={styles.label}>
-            Name:
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              style={styles.input}
-            />
-            {errors.name && <p style={styles.error}>{errors.name}</p>}
-          </label>
+        <button className="signup-btn google-btn">
+          <img src="/google-icon.png" alt="Google" className="icon" />
+          Sign up with Google
+        </button>
+        <button className="signup-btn apple-btn">
+          <img src="/apple-icon.png" alt="Apple" className="icon" />
+          Sign up with Apple
+        </button>
 
-          <label style={styles.label}>
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              style={styles.input}
-            />
-            {errors.email && <p style={styles.error}>{errors.email}</p>}
-          </label>
+        <div className="or-divider">
+          --------------------OR--------------------
+        </div>
 
-          <label style={styles.label}>
-            Phone Number:
-            <input
-              type="number"
-              name="number"
-              value={formData.number}
-              onChange={handleChange}
-              required
-              style={styles.input}
-            />
-            {errors.number && <p style={styles.error}>{errors.number}</p>}
-          </label>
-
-          <label style={styles.label}>
-            Password:
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              style={styles.input}
-            />
-            {errors.password && <p style={styles.error}>{errors.password}</p>}
-          </label>
-
-          <label style={styles.label}>
-            Confirm Password:
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              style={styles.input}
-            />
-            {errors.confirmPassword && (
-              <p style={styles.error}>{errors.confirmPassword}</p>
-            )}
-          </label>
-
-          {/* Interests Section */}
-          <fieldset style={styles.fieldset}>
-            <legend style={styles.legend}>Interests</legend>
-            <label>
+        <div className="form-container">
+          <form onSubmit={handleSubmit}>
+            <label className="label">
+              Name:
               <input
-                type="checkbox"
-                name="interests"
-                value="music"
-                checked={formData.interests === "music"}
-                onChange={handleCheckboxChange}
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="input"
               />
-              Music
+              {errors.name && <p className="error">{errors.name}</p>}
+            </label>
+
+            <label className="label">
+              Email:
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="input"
+              />
+              {errors.email && <p className="error">{errors.email}</p>}
+            </label>
+
+            <label className="label">
+              Phone Number:
+              <input
+                type="number"
+                name="number"
+                value={formData.number}
+                onChange={handleChange}
+                required
+                className="input"
+              />
+              {errors.number && <p className="error">{errors.number}</p>}
+            </label>
+
+            <label className="label">
+              Password:
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="input"
+              />
+              {errors.password && <p className="error">{errors.password}</p>}
+            </label>
+
+            <label className="label">
+              Confirm Password:
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+                className="input"
+              />
+              {errors.confirmPassword && (
+                <p className="error">{errors.confirmPassword}</p>
+              )}
+            </label>
+
+            <fieldset className="interests-fieldset">
+              <legend className="legend">Interests</legend>
+              <div className="interests-container">
+                {interestsOptions.map((interest) => (
+                  <div
+                    key={interest}
+                    className={`interest-box ${
+                      selectedInterests.includes(interest) ? "selected" : ""
+                    }`}
+                    onClick={() => toggleInterest(interest)}
+                  >
+                    {interest}
+                  </div>
+                ))}
+              </div>
+            </fieldset>
+            <br />
+            <label className="signup-checkbox">
+              <input type="checkbox" />I agree to all the{" "}
+              <a href="/terms">Privacy Policy and Terms & Conditions</a>
             </label>
             <br />
-            <label>
-              <input
-                type="checkbox"
-                name="interests"
-                value="art"
-                checked={formData.interests === "art"}
-                onChange={handleCheckboxChange}
-              />
-              Art
-            </label>
             <br />
-            <label>
-              <input
-                type="checkbox"
-                name="interests"
-                value="dance"
-                checked={formData.interests === "dance"}
-                onChange={handleCheckboxChange}
-              />
-              Dance
-            </label>
-            <br />
-            <label>
-              <input
-                type="checkbox"
-                name="interests"
-                value="yoga"
-                checked={formData.interests === "yoga"}
-                onChange={handleCheckboxChange}
-              />
-              Yoga
-            </label>
-            <br />
-            <label>
-              <input
-                type="checkbox"
-                name="interests"
-                value="c++"
-                checked={formData.interests === "c++"}
-                onChange={handleCheckboxChange}
-              />
-              C++
-            </label>
-            <br />
-            <label>
-              <input
-                type="checkbox"
-                name="interests"
-                value="java"
-                checked={formData.interests === "java"}
-                onChange={handleCheckboxChange}
-              />
-              Java
-            </label>
-            {errors.interests && <p style={styles.error}>{errors.interests}</p>}
-          </fieldset>
 
-          <button type="submit" style={styles.button}>
-            Sign Up
-          </button>
-        </form>
+            <button type="submit" className="button" disabled={isSubmitting}>
+              {isSubmitting ? "Signing Up..." : "Sign Up"}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Right Section */}
+      <div className="signup-right">
+        <img src="/signup.png" alt="image" className="signup-img" />
       </div>
     </div>
   );
 };
 
-// Internal CSS as a JavaScript object with React.CSSProperties
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    display: "flex",
-    flexDirection: "column" as "column",
-    position: "relative",
-    minHeight: "100vh",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "linear-gradient(135deg, #74ebd5, #acb6e5)",
-    fontFamily: "Roboto,Arial,sans-serif",
-    padding: "20px",
-  },
-  logo: {
-    position: "absolute",
-    top: "10px",
-    left: "10px",
-    width: "100px",
-    height: "100px",
-  },
-  formContainer: {
-    width: "100%",
-    maxWidth: "400px",
-    padding: "20px",
-    backgroundColor: "#f5faff",
-    borderRadius: "10px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  },
-  heading: {
-    textAlign: "center",
-    marginBottom: "20px",
-  },
-  label: {
-    display: "block",
-    marginBottom: "15px",
-    fontSize: "14px",
-  },
-  input: {
-    width: "95%",
-    padding: "8px",
-    marginTop: "5px",
-    fontSize: "14px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-  },
-  error: {
-    color: "red",
-    fontSize: "12px",
-    marginTop: "5px",
-  },
-  fieldset: {
-    border: "none",
-    padding: "0",
-    marginBottom: "20px",
-  },
-  legend: {
-    fontSize: "16px",
-    fontWeight: "bold",
-    marginBottom: "10px",
-  },
-  button: {
-    width: "100%",
-    padding: "10px",
-    backgroundColor: "#4caf50",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    fontSize: "16px",
-    cursor: "pointer",
-  },
-};
-
 export default Signup;
-

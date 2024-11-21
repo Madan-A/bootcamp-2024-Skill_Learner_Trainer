@@ -3,8 +3,8 @@ import StudentSignUp from './StudentSignUp';
 
 const Login: React.FC = () => {
   const [showStudentSignUp, setShowStudentSignUp] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, checkUsername] = useState('');
+  const [password, checkPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(''); // State for error message
 
   const styles = {
@@ -157,7 +157,7 @@ const Login: React.FC = () => {
           placeholder="Username"
           style={styles.input}
           value={username}
-          onChange={(e) => setUsername(e.target.value)} // Update username state
+          onChange={(e) => checkUsername(e.target.value)} // Update username state
         />
         <input
           type="password"
@@ -166,7 +166,7 @@ const Login: React.FC = () => {
           placeholder="Password"
           style={styles.input}
           value={password}
-          onChange={(e) => setPassword(e.target.value)} // Update password state
+          onChange={(e) => checkPassword(e.target.value)} // Update password state
         />
         {errorMessage && <div style={styles.errorMessage}>{errorMessage}</div>} {/* Display error */}
         <button type="submit" style={styles.button} onClick={handleLogin}>
