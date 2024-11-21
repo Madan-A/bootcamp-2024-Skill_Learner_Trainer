@@ -23,6 +23,7 @@ const Home: React.FC = () => {
         if (!response.ok) {
           throw new Error("Failed to fetch courses. Please try again later.");
         }
+        
         const data = await response.json();
         // Validate courses and set state
         const validCourses = data.filter(
