@@ -70,10 +70,11 @@
 
 /* Courses Title */
 .courses-title {
-  font-size: 24px;
-  text-align: center;
+  font-size: 30px;
+  text-align: left;
   margin-bottom: 20px;
   color: #333;
+  padding-left: 60px;
 }
 
 /* Courses Grid */
@@ -99,8 +100,8 @@
 
 /* Course Image (Logo) */
 .course-image {
-  width: 80px;
-  height: 80px;
+  width: 200px;
+  height: 200px;
   object-fit: cover;
   border-radius: 10px;
   margin-right: 20px; /* Spacing between image and details */
@@ -112,7 +113,7 @@
 }
 
 .course-name {
-  font-size: 18px;
+  font-size: 30px;
   font-weight: bold;
   margin-bottom: 5px;
   color: #333;
@@ -121,20 +122,20 @@
 .course-instructor,
 .course-fees {
   font-size: 16px;
-  margin: 5px 0;
   color: #555;
+  font-weight: bold;
 }
 
 /* Star Ratings */
 .course-ratings {
   display: flex;
   align-items: center;
-  font-size: 16px;
+  font-size: 20px;
   color: #555;
 }
 
 .star {
-  font-size: 16px;
+  font-size: 30px;
   color: gold;
   margin-right: 2px;
 }
@@ -145,15 +146,15 @@
 
 /* Buy Button */
 .buy-button {
-  margin-top: 10px;
   padding: 8px 15px;
   background-color: #4caf50;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 15px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 20px;
   transition: background-color 0.3s;
+  width: 150px;
 }
 
 .buy-button:hover {

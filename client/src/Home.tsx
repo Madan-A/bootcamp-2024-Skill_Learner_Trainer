@@ -11,11 +11,12 @@ interface Course {
 
 const Home: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [purchasedCourses, setPurchasedCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch courses from API
+    // Fetch available courses from API
     const fetchCourses = async () => {
       try {
         const response = await fetch("http://localhost:5001/api/getCourses");
@@ -40,6 +41,36 @@ const Home: React.FC = () => {
 
     fetchCourses();
   }, []);
+
+  const handleBuy = async (course: Course) => {
+    try {
+      // Add the course to purchased courses
+      setPurchasedCourses((prevCourses) => [...prevCourses, course]);
+
+      // Remove the course from available courses
+      setCourses((prevCourses) =>
+        prevCourses.filter((item) => item.name !== course.name)
+      );
+
+      // Add course to purchased courses API
+      const response = await fetch(
+        "http://localhost:5001/api/purchasedCourses",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(course),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to purchase course.");
+      }
+    } catch (err: any) {
+      setError(err.message || "An error occurred while purchasing.");
+    }
+  };
 
   const renderStars = (rating: number = 0) => {
     // Ensure the rating is valid and within 0-5 range
@@ -84,7 +115,6 @@ const Home: React.FC = () => {
             className="search-bar"
           />
         </div>
-
         <div className="notification-icon-container">
           <img
             src="/notification-icon.png"
@@ -94,7 +124,6 @@ const Home: React.FC = () => {
         </div>
       </header>
 
-      {/* Courses List */}
       <section className="courses-list">
         <div className="categories">
           <div className="category-type">Music</div>
@@ -108,6 +137,34 @@ const Home: React.FC = () => {
           <div className="category-type">Literature</div>
           <div className="category-type">Public Speaking</div>
         </div>
+
+        {/* Purchased Courses Section */}
+        {purchasedCourses.length > 0 && (
+          <section className="purchased-courses-list">
+            <h2 className="courses-title">Purchased Courses</h2>
+            <div className="courses-container">
+              {purchasedCourses.map((course, index) => (
+                <div key={index} className="course-card">
+                  <div className="course-logo">
+                    <img
+                      src={course.image}
+                      alt={course.name}
+                      className="course-image"
+                    />
+                  </div>
+                  <div className="course-details">
+                    <h3 className="course-name">{course.name}</h3>
+                    <p className="course-instructor">
+                      Instructor: {course.instructor}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Available Courses Section */}
 
         <h2 className="courses-title">Available Courses</h2>
         {isLoading ? (
@@ -134,7 +191,12 @@ const Home: React.FC = () => {
                   <p className="course-ratings">
                     Ratings: {renderStars(course.ratings ?? 0)}
                   </p>
-                  <button className="buy-button">Buy</button>
+                  <button
+                    className="buy-button"
+                    onClick={() => handleBuy(course)}
+                  >
+                    Buy
+                  </button>
                 </div>
               </div>
             ))}
@@ -142,7 +204,7 @@ const Home: React.FC = () => {
         )}
       </section>
 
-      {/* Task Bar */}
+      {/* Footer Task Bar */}
       <footer className="task-bar">
         <div className="task-bar-item">
           <img src="/home-icon.png" alt="Home" className="task-bar-icon" />
