@@ -94,10 +94,10 @@ const Signup: React.FC = () => {
         email: formData.email,
         phone: formData.number,
         password: formData.password,
-        interest: selectedInterests.join(','),
+        interest: selectedInterests.join(","),
       };
       try {
-        const response = await fetch("http://localhost:5000/api/createUser", {
+        const response = await fetch("http://localhost:5001/api/createUser", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
