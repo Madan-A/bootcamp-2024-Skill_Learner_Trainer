@@ -89,40 +89,37 @@ const Signup: React.FC = () => {
       setIsSubmitting(true); // Set loading state to true before sending the request
 
       // Commented out API code completely for now
-      // const signupData = {
-      //   name: formData.name,
-      //   email: formData.email,
-      //   number: formData.number,
-      //   password: formData.password,
-      //   interests: selectedInterests,
-      // };
-      // try {
-      //   const response = await fetch("https://your-api-url.com/createuser", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify(signupData),
-      //   });
-      //   const result = await response.json();
-      //   if (response.ok) {
-      //     setShowHome(true);
-      //   } else {
-      //     alert("Signup failed: " + result.message);
-      //   }
-      // } catch (error) {
-      //   alert("An error occurred. Please try again.");
-      // } finally {
-      //   setIsSubmitting(false);
-      // }
-
-      // Directly trigger redirection to the Home page
-      setShowHome(true); // Trigger redirection
+      const signupData = {
+        name: formData.name,
+        email: formData.email,
+        number: formData.number,
+        password: formData.password,
+        interests: selectedInterests,
+      };
+      try {
+        const response = await fetch("https://your-api-url.com/createuser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(signupData),
+        });
+        const result = await response.json();
+        if (response.ok) {
+          setShowHome(true); // Set to true only on successful signup
+        } else {
+          alert("Signup failed: " + result.message);
+        }
+      } catch (error) {
+        alert("An error occurred. Please try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
   if (showHome) {
-    return <Home />;
+    return <Home />; // Redirect to Home page only on successful signup
   }
 
   return (
@@ -176,7 +173,7 @@ const Signup: React.FC = () => {
             <label className="label">
               Phone Number:
               <input
-                type="number"
+                type="phone"
                 name="number"
                 value={formData.number}
                 onChange={handleChange}
@@ -232,7 +229,7 @@ const Signup: React.FC = () => {
             </fieldset>
             <br />
             <label className="signup-checkbox">
-              <input type="checkbox" />I agree to all the{" "}
+              <input type="checkbox" required />I agree to all the{" "}
               <a href="/terms">Privacy Policy and Terms & Conditions</a>
             </label>
             <br />

@@ -1,30 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Home.css";
 
+interface Course {
+  image: string;
+  name: string;
+  instructor: string;
+  fees: string;
+  ratings: number;
+}
+
 const Home: React.FC = () => {
-  const courses = [
-    {
-      image: "/path/to/image1.png", // Example image path
-      name: "Web Development",
-      duration: "6 Months",
-      fees: "$200",
-      ratings: "4.5/5",
-    },
-    {
-      image: "/path/to/image2.png", // Example image path
-      name: "Data Science",
-      duration: "8 Months",
-      fees: "$350",
-      ratings: "4.8/5",
-    },
-    {
-      image: "/path/to/image3.png", // Example image path
-      name: "Machine Learning",
-      duration: "12 Months",
-      fees: "$500",
-      ratings: "4.7/5",
-    },
-  ];
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Fetch courses from API
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/getCourses");
+        if (!response.ok) {
+          throw new Error("Failed to fetch courses. Please try again later.");
+        }
+        const data = await response.json();
+        setCourses(data);
+        setIsLoading(false);
+      } catch (err: any) {
+        setError(err.message || "An error occurred.");
+        setIsLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  const renderStars = (rating: number) => {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+    return (
+      <>
+        {Array(fullStars)
+          .fill(0)
+          .map((_, index) => (
+            <span key={`full-${index}`} className="star full-star">
+              ★
+            </span>
+          ))}
+        {halfStar && <span className="star half-star">★</span>}
+        {Array(emptyStars)
+          .fill(0)
+          .map((_, index) => (
+            <span key={`empty-${index}`} className="star empty-star">
+              ☆
+            </span>
+          ))}
+      </>
+    );
+  };
 
   return (
     <div className="home-container">
@@ -34,12 +68,14 @@ const Home: React.FC = () => {
           <img src="/logo.png" alt="Logo" className="logo" />
         </div>
         <div className="search-bar-container">
+          <img src="/search-icon.png" alt="Search" className="search-icon" />
           <input
             type="text"
             placeholder="Search Courses..."
             className="search-bar"
           />
         </div>
+
         <div className="notification-icon-container">
           <img
             src="/notification-icon.png"
@@ -51,24 +87,50 @@ const Home: React.FC = () => {
 
       {/* Courses List */}
       <section className="courses-list">
-        <h2 className="courses-title">Available Courses</h2>
-        <div className="courses-container">
-          {courses.map((course, index) => (
-            <div key={index} className="course-card">
-              <img
-                src={course.image}
-                alt={course.name}
-                className="course-image"
-              />
-              <div className="course-details">
-                <h3 className="course-name">{course.name}</h3>
-                <p className="course-duration">Duration: {course.duration}</p>
-                <p className="course-fees">Fees: {course.fees}</p>
-                <p className="course-ratings">Ratings: {course.ratings}</p>
-              </div>
-            </div>
-          ))}
+        <div className="categories">
+          <div className="category-type">Music</div>
+          <div className="category-type">Dance</div>
+          <div className="category-type">Drawing</div>
+          <div className="category-type">Photography</div>
+          <div className="category-type">Writing</div>
+          <div className="category-type">Cooking</div>
+          <div className="category-type">Coding</div>
+          <div className="category-type">Acting</div>
+          <div className="category-type">Literature</div>
+          <div className="category-type">Public Speaking</div>
         </div>
+
+        <h2 className="courses-title">Available Courses</h2>
+        {isLoading ? (
+          <p>Loading courses...</p>
+        ) : error ? (
+          <p className="error-message">{error}</p>
+        ) : (
+          <div className="courses-container">
+            {courses.map((course, index) => (
+              <div key={index} className="course-card">
+                <div className="course-logo">
+                  <img
+                    src={course.image}
+                    alt={course.name}
+                    className="course-image"
+                  />
+                </div>
+                <div className="course-details">
+                  <h3 className="course-name">{course.name}</h3>
+                  <p className="course-instructor">
+                    Instructor: {course.instructor}
+                  </p>
+                  <p className="course-fees">Fees: {course.fees}</p>
+                  <p className="course-ratings">
+                    Ratings: {renderStars(course.ratings)}
+                  </p>
+                  <button className="buy-button">Buy</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Task Bar */}

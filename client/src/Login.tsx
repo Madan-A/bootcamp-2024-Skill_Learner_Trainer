@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import StudentSignUp from './StudentSignUp';
-import './LoginSignup.css';
+import React, { useState } from "react";
+import StudentSignUp from "./StudentSignUp";
+import "./LoginSignup.css";
+import Home from "./Home";
 
 const Login: React.FC = () => {
   const [showStudentSignUp, setShowStudentSignUp] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleStudentSignUpClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -19,29 +21,34 @@ const Login: React.FC = () => {
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setErrorMessage('');
+    setErrorMessage("");
 
     const data = { username, password };
 
     try {
-      const response = await fetch('http://localhost:5000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Login successful:', result);
+        console.log("Login successful:", result);
+        setIsLoggedIn(true);
       } else {
         const errorResult = await response.json();
-        setErrorMessage(errorResult.error || 'Login failed');
+        setErrorMessage(errorResult.error || "Login failed");
       }
     } catch (error) {
-      setErrorMessage('An error occurred. Please try again.');
-      console.error('Error:', error);
+      setErrorMessage("An error occurred. Please try again.");
+      console.error("Error:", error);
     }
   };
+
+  if (isLoggedIn) {
+    return <Home />;
+  }
 
   return (
     <div className="container">
@@ -68,8 +75,11 @@ const Login: React.FC = () => {
         </button>
         <p className="text">OR</p>
         <p className="text">Don't have an account? Sign up as:</p>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-          <button className="button-secondary" onClick={handleStudentSignUpClick}>
+        <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+          <button
+            className="button-secondary"
+            onClick={handleStudentSignUpClick}
+          >
             Student
           </button>
           <button className="button-secondary-disabled" disabled>

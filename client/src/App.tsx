@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { fetchSampleData } from './services/apiService';
-import Login from './Login';
+import React, { useEffect, useState } from "react";
+import { fetchSampleData } from "./services/apiService";
+import Login from "./Login";
 
 interface SampleData {
   id: number;
@@ -11,12 +11,12 @@ const App: React.FC = () => {
   const [data, setData] = useState<SampleData[]>([]);
 
   useEffect(() => {
-    fetchSampleData().then(response => setData(response.data));
+    fetchSampleData().then((response) => setData(response.data));
   }, []);
 
   return (
     <div className="App">
-      <Login/>
+      <Login />
     </div>
   );
 };
