@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/db';
 import newRoute from './routes/newRoutes';
 import sqlite3 from 'sqlite3';
-//import express from 'express';
+import createUserRoute from './routes/createUserRoute';//import express from 'express';
 
 dotenv.config();
 
@@ -26,6 +26,7 @@ const PORT = process.env.PORT || 5000;
     app.use(express.json());
     app.use('/api/sample', sampleRoute);
     app.use('/api/login', newRoute);
+    app.use('/api/createUser',createUserRoute);
 
     app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);
