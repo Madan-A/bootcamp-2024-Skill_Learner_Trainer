@@ -17,10 +17,8 @@ const cors_1 = __importDefault(require("cors"));
 const sampleRoute_1 = __importDefault(require("./routes/sampleRoute"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const db_1 = require("./config/db");
-const newRoutes_1 = __importDefault(require("./routes/loginRoutes"));
-const userRouter_1 = __importDefault(require("./routes/createRoute"));
-
-//import express from 'express';
+const newRoutes_1 = __importDefault(require("./routes/newRoutes"));
+const createUserRoute_1 = __importDefault(require("./routes/createUserRoute")); //import express from 'express';
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
@@ -35,6 +33,7 @@ const PORT = process.env.PORT || 5000;
         app.use(express_1.default.json());
         app.use('/api/sample', sampleRoute_1.default);
         app.use('/api/login', newRoutes_1.default);
+        app.use('/api/createUser', createUserRoute_1.default);
         app.listen(PORT, () => {
             console.log(`Server is running on http://localhost:${PORT}`);
         });

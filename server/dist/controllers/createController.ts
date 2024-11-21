@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 // Controller to create a new user
-export const createUser = (req: Request, res: Response) => {
+export const createUser = (req, res) => {
   const { phone, email, trainerid, studentid, password, name, confirm_password } = req.body;
 
   // Validate required fields

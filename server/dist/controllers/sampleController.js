@@ -13,7 +13,7 @@ exports.getSampleData = void 0;
 const getSampleData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const db = req.app.locals.db; // Access db instance
-        const rows = yield db.all('SELECT * FROM sample_table'); // Example query
+        const rows = yield db.all('SELECT * FROM sample_table;'); // Example query
         res.json(rows);
     }
     catch (error) {
