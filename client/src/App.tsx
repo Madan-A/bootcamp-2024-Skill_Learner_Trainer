@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { fetchSampleData } from "./services/apiService";
-import Login from "./Login";
-
-interface SampleData {
-  id: number;
-  name: string;
-}
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './Login'; // Assuming Login is your login component
+import PurchasedCourseDetails from './PurchasedCourseDetails'; // Assuming this is another component
 
 const App: React.FC = () => {
-  const [data, setData] = useState<SampleData[]>([]);
-
-  useEffect(() => {
-    fetchSampleData().then((response) => setData(response.data));
-  }, []);
-
   return (
-    <div className="App">
-      <Login />
-    </div>
+    <Router> {/* Wrap the Routes inside Router */}
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Login />} /> {/* Route for the login page */}
+          <Route path="/purchased-course/:id" element={<PurchasedCourseDetails />} />
+          {/* Add other routes as necessary */}
+        </Routes>
+      </div>
+    </Router>
   );
 };
 

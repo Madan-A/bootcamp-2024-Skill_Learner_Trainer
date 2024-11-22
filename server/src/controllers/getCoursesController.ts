@@ -14,7 +14,7 @@ export const getCourses = async (
 
   try {
     // Execute the query to get all courses
-    const rows = await db.all("SELECT * FROM courses;");
+    const rows = await db.all("SELECT image_url, name, instructor, price, rating ,id FROM courses;");
     res.json(rows);
 
     // db.all(query, (err: Error | null, rows: any[]) => {

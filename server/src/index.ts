@@ -8,6 +8,7 @@ import sqlite3 from "sqlite3";
 import createUserRoute from "./routes/createUserRoute"; //import express from 'express';
 import getCourses from "./routes/getCourses";
 import loginRoute from "./routes/loginRoute";
+import getCoursesDetails from "./routes/CourseDetails";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ const PORT = process.env.PORT || 5001;
     app.use("/api/createUser", createUserRoute);
     app.use("/api/getCourses", getCourses);
     app.use("/api/login", loginRoute);
+    app.use("/api/getCourseDetails/:courseId", getCoursesDetails);
 
     app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);

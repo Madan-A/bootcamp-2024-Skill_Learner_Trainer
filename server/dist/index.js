@@ -21,6 +21,7 @@ const newRoutes_1 = __importDefault(require("./routes/newRoutes"));
 const createUserRoute_1 = __importDefault(require("./routes/createUserRoute")); //import express from 'express';
 const getCourses_1 = __importDefault(require("./routes/getCourses"));
 const loginRoute_1 = __importDefault(require("./routes/loginRoute"));
+const CourseDetails_1 = __importDefault(require("./routes/CourseDetails"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5001;
@@ -38,6 +39,7 @@ const PORT = process.env.PORT || 5001;
         app.use("/api/createUser", createUserRoute_1.default);
         app.use("/api/getCourses", getCourses_1.default);
         app.use("/api/login", loginRoute_1.default);
+        app.use("/api/getCourseDetails/:courseId", CourseDetails_1.default);
         app.listen(PORT, () => {
             console.log(`Server is running on http://localhost:${PORT}`);
         });
